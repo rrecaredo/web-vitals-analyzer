@@ -1,0 +1,17 @@
+{
+    "tenants": [
+        {
+            "tenant_id": "xxx00000",
+            "tenant_name": "Foobar INC",
+            "applications": [
+                "APPLICATION-XXXXXXXXXXXXX"
+            ]
+        }
+    ],
+    "applications": [
+        {
+            "application_id": "APPLICATION-XXXXXXXXXXXXX",
+            "application_name": "Foobar logistics"
+        }
+    ]
+}
