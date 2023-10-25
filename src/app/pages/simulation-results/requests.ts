@@ -56,6 +56,7 @@ export const useFetchSimulationResults = () => {
     return simulationResults;
   };
 
+  // @TODO: Type the response from useQuery, useQuery<ResponseType>
   const { data, refetch, isLoading, error } = useQuery({
     enabled: false,
     queryKey: ["simulation-results"],

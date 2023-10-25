@@ -11,6 +11,7 @@ type Actions = {
   setTenant: (tenant: string) => void;
   setApplication: (application: string) => void;
   setDateRange: (dateRange: DateRange) => void;
+  clearFilters: () => void;
 };
 
 type Filters = {
@@ -46,6 +47,15 @@ const useFilters = create(
       setDateRange: (dateRange: DateRange) =>
         set((state) => {
           state.filters.dateRange = dateRange;
+        }),
+      clearFilters: () =>
+        set((state) => {
+          state.filters.tenant = "";
+          state.filters.application = "";
+          state.filters.dateRange = {
+            startDate: "",
+            endDate: "",
+          };
         }),
     },
   }))

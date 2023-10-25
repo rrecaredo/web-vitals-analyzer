@@ -9,12 +9,14 @@ import {
   TimeframeSelector,
   Timeframe,
   showToast,
+  Button,
 } from "@dynatrace/strato-components-preview";
-import { ProgressCircle } from "@dynatrace/strato-components-preview/core";
 
-import { useFetchTenants } from "../hooks";
-import { useFiltersActions, useFiltersStore } from "../store";
-import { formatDate } from "../utils";
+import { ProgressCircle } from "@dynatrace/strato-components-preview/core";
+import { XmarkIcon } from "@dynatrace/strato-icons";
+import { useFetchTenants } from "src/app/hooks";
+import { useFiltersActions, useFiltersStore } from "src/app/store";
+import { formatDate } from "src/app/utils";
 
 const LogoArea = styled.div`
   width: 200px;
@@ -78,7 +80,7 @@ export const Filters = () => {
   };
 
   return (
-    <Flex mb={8} mt={8}>
+    <Flex mb={8} mt={8} alignItems='center'>
       <LogoArea></LogoArea>
       <FilterBar
         onFilterChange={() => {
@@ -123,6 +125,16 @@ export const Filters = () => {
           />
         </FilterBar.Item>
       </FilterBar>
+      <Button
+        style={{ marginTop: "20px" }}
+        loading={isLoading}
+        onClick={filterActions.clearFilters}
+      >
+        <Button.Prefix>
+          <XmarkIcon />
+        </Button.Prefix>
+        Clear
+      </Button>
       {isLoading && <ProgressCircle />}
     </Flex>
   );

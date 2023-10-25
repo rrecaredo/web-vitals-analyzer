@@ -29,7 +29,7 @@ export const PageCell = styled.div`
 export const PageColumn = styled(Flex)`
   position: relative;
   margin-right: ${Spacings.Size8};
-  box-shadow: 0 -10px 30px -10px rgba(150, 150, 150, 0.5);
+  box-shadow: 0 -10px 50px -10px rgba(150, 150, 150, 0.5);
 
   &::before {
     content: "";

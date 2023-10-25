@@ -5,7 +5,7 @@ import { Flex } from "@dynatrace/strato-components-preview";
 import { GridIcon, AnalyticsIcon } from "@dynatrace/strato-icons";
 import { Link } from "@dynatrace/strato-components-preview/typography";
 
-import { ROUTES } from "../App";
+import { ROUTES } from "src/app/App";
 
 const activeLinkStyle = {
   fontWeight: "bold",
@@ -42,7 +42,7 @@ export const Navigation = () => {
           }
           to={`./${ROUTES.SIMULATION_RESULTS}`}
         >
-          Simulation Scores
+          Simulation Results
         </Link>
       </Flex>
     </Flex>

@@ -43,6 +43,7 @@ export const ImpactScores = () => {
         <TitleBar.Title>Impact Scores</TitleBar.Title>
       </TitleBar>
       <main style={{ marginTop: "80px" }}>
+        {/* @TODO: Move to its own ImpactScoresTable component */}
         {data && (
           <Flex gap={0}>
             <PageColumn

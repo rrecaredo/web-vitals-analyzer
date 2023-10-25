@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import {
+  Flex,
   Skeleton,
   Surface,
   TitleBar,
@@ -11,6 +12,7 @@ import { useFiltersStore } from "src/app/store";
 import { useFetchSimulationResults } from "./requests";
 import { SimulationResultsFilters } from "./SimulationResultsFilters";
 import { useSimulationResultsFiltersStore } from "./useSimulationResultsFilters.store";
+import { SimulationResultPlot } from "./components/SimulationResultsPlot";
 
 export const SimulationResults = () => {
   const { tenant, application, dateRange } = useFiltersStore();
@@ -48,16 +50,21 @@ export const SimulationResults = () => {
   return (
     <>
       <TitleBar>
-        <TitleBar.Title>Simulation Scores</TitleBar.Title>
+        <TitleBar.Title>Simulation Results</TitleBar.Title>
       </TitleBar>
       {/* @TODO; Convert structure to a common component */}
+      <br />
       <main>
         {tenant && application && dateRange && (
-          <>
+          <Flex margin={2} flexDirection='column'>
             <Surface>
               <SimulationResultsFilters />
             </Surface>
-          </>
+            <br />
+            {data && (
+              <SimulationResultPlot width={500} height={500} data={data} />
+            )}
+          </Flex>
         )}
       </main>
     </>
