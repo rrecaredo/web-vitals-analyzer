@@ -1,10 +1,22 @@
 /*
+-----------------------------------------------------------------------------
 I wanted to use a Dynatrace equivalent of TimeSeriesChart so as to leverage
 Annotations, Markers, Tracks and so on, but as the name suggests, TimeSeries
 components are coupled to over time specific data, which is not the case for
 the use case.
+
+Originally I considered creating the entire chart from scratch by composing SVG
+elements, using a coorddinate system and event delegation to handle tooltips
+but I soon discarded it as although possible, I found this approach to be
+too complex for a take home assignment.
+
+Next, this was an attempt to use Airbnb visx charting solution to create a chart
+for the simulation results but then I realized it was going to take me too
+long tweak it to my needs, so I decided to go with Recharts instead.
+-----------------------------------------------------------------------------
 */
 
+/*
 import React from "react";
 import { Group } from "@visx/group";
 import { curveBasis } from "@visx/curve";
@@ -119,3 +131,4 @@ export function SimulationResultPlot({
     </div>
   );
 }
+*/

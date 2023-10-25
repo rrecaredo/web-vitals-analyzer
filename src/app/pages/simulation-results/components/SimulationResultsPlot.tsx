@@ -1,114 +1,152 @@
-import React from "react";
-import { Group } from "@visx/group";
-import { curveBasis } from "@visx/curve";
-import { Threshold } from "@visx/threshold";
-import { scaleLinear } from "@visx/scale";
-import { AxisLeft, AxisBottom } from "@visx/axis";
-import { GridRows, GridColumns } from "@visx/grid";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Area,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import Colors from "@dynatrace/strato-design-tokens/colors";
 
-export const background = "#f3f3f3";
-
-const defaultMargin = { top: 40, right: 30, bottom: 50, left: 40 };
-
-type Impact = {
-  median: number;
-  predictedMin: number;
-  predictedMax: number;
-};
+import { Impact } from "./types";
+import { useSimulationDataMapping } from "./useSimulationDataMapping";
+import { MetricType } from "src/app/types";
+import { CustomReferenceArea } from "./CustomReferenceArea";
+import { scaleLinear } from "d3-scale";
 
 export type ThresholdProps = {
-  width: number;
-  height: number;
-  margin?: { top: number; right: number; bottom: number; left: number };
   data: Impact[];
+  target?: number;
+  current?: number;
+  benchmark?: number;
+  metricType: MetricType;
 };
 
 export function SimulationResultPlot({
-  width,
-  height,
-  margin = defaultMargin,
   data = [],
+  metricType,
+  target,
+  current,
+  benchmark,
 }: ThresholdProps) {
-  if (width < 10) return null;
+  const [chartWidth, setChartWidth] = useState(0);
 
-  const yScale = scaleLinear<number>({
-    domain: [
-      Math.min(...data.map((d) => d.predictedMin)),
-      Math.max(...data.map((d) => d.predictedMax)),
-    ],
-    nice: true,
-  });
+  const plotData = useSimulationDataMapping(data);
 
-  const xScale = scaleLinear<number>({
-    domain: [
-      Math.min(...data.map((d) => d.median)),
+  const yDomain = [0, Math.max(...data.map((d) => d.predictedMax)) + 0.1];
+
+  const xDomain = useMemo(
+    () => [
       Math.max(...data.map((d) => d.median)),
+      Math.min(...data.map((d) => d.median)),
     ],
-  });
+    [data]
+  );
 
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
+  const updateChartDimensions = useCallback(() => {
+    const chartContainer: HTMLElement = document.querySelector(
+      ".recharts-cartesian-grid"
+    ) as HTMLElement;
 
-  xScale.range([0, xMax]);
-  yScale.range([yMax, 0]);
+    setChartWidth(chartContainer?.offsetWidth);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateChartDimensions);
+
+    return () => {
+      window.removeEventListener("resize", updateChartDimensions);
+    };
+  }, [updateChartDimensions]);
+
+  const xScale = useMemo(
+    () => scaleLinear().domain(xDomain).range([0, chartWidth]),
+    [chartWidth, xDomain]
+  );
+
+  const percentageTickFormatter = (value: number) =>
+    `${(value * 100).toFixed(1)}%`;
 
   return (
-    <div>
-      <svg width={width} height={height}>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fill={background}
-          rx={14}
-        />
-        <Group left={margin.left} top={margin.top}>
-          <GridRows
-            scale={yScale}
-            width={xMax}
-            height={yMax}
-            stroke='#e0e0e0'
-          />
-          <GridColumns
-            scale={xScale}
-            width={xMax}
-            height={yMax}
-            stroke='#e0e0e0'
-          />
-          <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke='#e0e0e0' />
-          <AxisBottom
-            top={yMax}
-            scale={xScale}
-            numTicks={width > 520 ? 10 : 5}
-          />
-          <AxisLeft
-            scale={yScale}
-            tickFormat={(d) => {
-              console.log(Math.ceil(d as number) * 100);
-              return `${Math.floor((d as number) * 100)}%`;
+    <div style={{ width: "100%", height: "600px" }}>
+      <ResponsiveContainer debounce={1} width='99%'>
+        <ComposedChart data={plotData}>
+          <CartesianGrid strokeDasharray='3 3' />
+          <XAxis
+            dataKey={"median"}
+            tickFormatter={(value) => `${value}`}
+            fontSize={12}
+            domain={xDomain}
+            angle={-90}
+            tickMargin={15}
+            label={{
+              value: `Median ${metricType}`,
+              fontSize: 12,
+              fontWeight: "bold",
+              offset: 50,
+              position: "insideBottom",
             }}
           />
-          <Threshold<Impact>
-            id={`${Math.random()}`}
-            data={data}
-            x={(d) => xScale(d.median) ?? 0}
-            y0={(d) => yScale(d["predictedMin"]) ?? 0}
-            y1={(d) => yScale(d["predictedMax"]) ?? 0}
-            clipAboveTo={0}
-            clipBelowTo={yMax}
-            curve={curveBasis}
-            belowAreaProps={{
-              fill: "violet",
-              fillOpacity: 0.4,
-            }}
-            aboveAreaProps={{
-              fill: "green",
-              fillOpacity: 0.4,
+          <YAxis
+            tickFormatter={percentageTickFormatter}
+            fontSize={12}
+            domain={yDomain}
+            label={{
+              value: "Median Exit Rate",
+              angle: -90,
+              fontSize: 12,
+              fontWeight: "bold",
+              position: "insideLeft",
             }}
           />
-        </Group>
-      </svg>
+          <Line
+            dataKey='predicted'
+            stroke={Colors.Charts.Categorical.Color01.Default}
+            isAnimationActive={false}
+          />
+          <Area
+            dataKey='predictedRange'
+            strokeWidth={0}
+            fillOpacity={0.5}
+            fill={Colors.Charts.CategoricalThemed.Swamps.Color01.Default}
+            isAnimationActive={false}
+          />
+          {/* ---------------------------------------------------------------------------------------------- */}
+          {/* REFERENCE AREAS ARE NOT RENDERING CORRECTLY BECAUSE THE SCALE IS NOT PROPERLY BEING CALCULATED */}
+          {/* ---------------------------------------------------------------------------------------------- */}
+
+          {/* {target && (
+            <>
+              {CustomReferenceArea({
+                value: xScale(target),
+                fill: Colors.Charts.CategoricalThemed.PurpleRain.Color05
+                  .Default,
+                label: "Target",
+              })}
+            </>
+          )} */}
+          {/* {current && (
+            <>
+              {CustomReferenceArea({
+                value: xScale(current),
+                fill: Colors.Charts.CategoricalThemed.Swamps.Color04.Default,
+                label: "Current",
+              })}
+            </>
+          )}
+          {benchmark && (
+            <>
+              {CustomReferenceArea({
+                value: xScale(benchmark),
+                fill: Colors.Charts.CategoricalThemed.Fireplace.Color04.Default,
+                label: "Benchmark",
+              })}
+            </>
+          )} */}
+        </ComposedChart>
+      </ResponsiveContainer>
     </div>
   );
 }

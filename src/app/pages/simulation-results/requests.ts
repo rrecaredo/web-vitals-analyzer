@@ -1,17 +1,24 @@
 import { functions } from "@dynatrace-sdk/app-utils";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { PAGES } from "../constants";
 import { BrowserType, MetricType, PageType } from "src/app/types";
 
-const fetchSimulationResults = async (
-  tenant: string,
-  app: string,
-  range: { startDate: string; endDate: string },
-  browserType: BrowserType | "",
-  metricType: MetricType | "",
-  pageName: PageType | ""
-) => {
+type FetchSimulationResultsArgs = {
+  tenant: string;
+  app: string | null;
+  range: { startDate: string; endDate: string };
+  browserType: BrowserType | null;
+  metricType: MetricType | null;
+  pageName: PageType | null;
+};
+
+const fetchSimulationResults = async ({
+  tenant,
+  app,
+  range,
+  browserType,
+  metricType,
+  pageName,
+}: FetchSimulationResultsArgs) => {
   try {
     const simulationResultResponse = await functions.call(
       "get-simulation-results",
@@ -34,53 +41,50 @@ const fetchSimulationResults = async (
   }
 };
 
-// Both useFetchSimulationResults and useFetchImpactScores are almost identical,
-// @TODO: Abstract them into a single function
-export const useFetchSimulationResults = () => {
-  const [tenant, setTenant] = useState("");
-  const [app, setApp] = useState("");
-  const [range, setRange] = useState({ startDate: "", endDate: "" });
-  const [pageName, setPageName] = useState<PageType | "">("");
-  const [browserType, setBrowserType] = useState<BrowserType | "">("");
-  const [metricType, setMetricType] = useState<MetricType | "">("");
-
+export const useFetchSimulationResults = ({
+  tenant,
+  app,
+  range,
+  browserType,
+  metricType,
+  pageName,
+}: FetchSimulationResultsArgs) => {
   const queryFnWithArgs = async () => {
-    const simulationResults = await fetchSimulationResults(
+    const simulationResults = await fetchSimulationResults({
       tenant,
       app,
       range,
       browserType,
       metricType,
-      pageName
-    );
+      pageName,
+    });
     return simulationResults;
   };
 
-  // @TODO: Type the response from useQuery, useQuery<ResponseType>
-  const { data, refetch, isLoading, error } = useQuery({
+  /*
+  @TODO: Type the response from useQuery, useQuery<ResponseType> where
+  ResponseType should be something like
+  {
+    trends[],
+    current,
+    target,
+    benchmark,
+  }
+  */
+  const { data, refetch, isFetched, isLoading, error } = useQuery({
     enabled: false,
-    queryKey: ["simulation-results"],
+    queryKey: [
+      "simulation-results",
+      tenant,
+      app,
+      range,
+      browserType,
+      metricType,
+      pageName,
+    ],
     queryFn: queryFnWithArgs,
     refetchOnWindowFocus: false,
   });
 
-  const request = (
-    tenant: string,
-    app: string,
-    range: { startDate: string; endDate: string },
-    browserType: "mobile" | "desktop" | "all",
-    metricType: MetricType,
-    pageName: (typeof PAGES)[number]
-  ) => {
-    setTenant(tenant);
-    setApp(app);
-    setRange(range);
-    setBrowserType(browserType);
-    setMetricType(metricType);
-    setPageName(pageName);
-
-    refetch();
-  };
-
-  return { data, isLoading, error, request };
+  return { data, isLoading, error, isFetched, request: refetch };
 };

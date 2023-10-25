@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import {
   Flex,
+  SingleValue,
   Skeleton,
   Surface,
   TitleBar,
@@ -17,7 +18,15 @@ import { SimulationResultPlot } from "./components/SimulationResultsPlot";
 export const SimulationResults = () => {
   const { tenant, application, dateRange } = useFiltersStore();
   const { browserType, page, metricType } = useSimulationResultsFiltersStore();
-  const { data, isLoading, error, request } = useFetchSimulationResults();
+  const { data, isLoading, isFetched, error, request } =
+    useFetchSimulationResults({
+      tenant,
+      app: application,
+      range: dateRange,
+      browserType,
+      pageName: page,
+      metricType,
+    });
 
   useEffect(() => {
     if (error)
@@ -39,13 +48,47 @@ export const SimulationResults = () => {
       page &&
       metricType
     ) {
-      request(tenant, application, dateRange, browserType, metricType, page);
+      request();
     }
   }, [tenant, application, dateRange, request, browserType, page, metricType]);
 
-  if (isLoading) return <Skeleton />;
+  const content = useMemo(() => {
+    // Order of precedence: Error > Loading > Emptyness
+    if (error) {
+      return (
+        <SingleValue data={""}>
+          <SingleValue.ErrorState>Something went wrong</SingleValue.ErrorState>
+        </SingleValue>
+      );
+    }
 
-  console.log(data);
+    if (!data?.trends?.length && isFetched) {
+      return (
+        <SingleValue data={""}>
+          <SingleValue.EmptyState>No data available</SingleValue.EmptyState>
+        </SingleValue>
+      );
+    }
+
+    return isFetched ? (
+      <SimulationResultPlot
+        metricType={metricType || ""}
+        data={data.trends}
+        target={data.target}
+        current={data.current}
+        benchmark={data.benchmark}
+      />
+    ) : null;
+  }, [data, error, isFetched, metricType]);
+
+  if (error)
+    return (
+      <SingleValue data={""}>
+        <SingleValue.ErrorState>Something went wrong</SingleValue.ErrorState>
+      </SingleValue>
+    );
+
+  if (isLoading) return <Skeleton />;
 
   return (
     <>
@@ -61,9 +104,7 @@ export const SimulationResults = () => {
               <SimulationResultsFilters />
             </Surface>
             <br />
-            {data && (
-              <SimulationResultPlot width={500} height={500} data={data} />
-            )}
+            {content}
           </Flex>
         )}
       </main>

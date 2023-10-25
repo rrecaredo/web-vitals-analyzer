@@ -13,7 +13,7 @@ const schema = Joi.object({
 */
 
 import { BASE_API_URL, USERNAME } from "./constants";
-import { getMetricsData } from "./data-transformations";
+import { DataProcessor } from "./data-processor";
 
 type Payload = {
   tenantId: string;
@@ -39,7 +39,7 @@ export default async function (payload: Payload) {
     const allData = await response.json();
     const parsedData = JSON.parse(allData.response);
 
-    const metrics = getMetricsData(parsedData);
+    const metrics = DataProcessor.getMetricsData(parsedData);
 
     return metrics;
   } catch (e) {

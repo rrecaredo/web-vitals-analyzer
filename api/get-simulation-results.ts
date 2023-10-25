@@ -1,5 +1,5 @@
 import { BASE_API_URL, BROWSER_TYPES, USERNAME } from "./constants";
-import { getSimulationResults } from "./data-transformations";
+import { DataProcessor } from "./data-processor";
 import type { BrowserType } from "./types";
 
 type Payload = {
@@ -29,15 +29,14 @@ export default async function (payload: Payload) {
     const allData = await response.json();
     const parsedData = JSON.parse(allData.response);
 
-    // console.log("parsedData", parsedData);
-
     const browserTypeMap: Record<BrowserType, typeof BROWSER_TYPES[keyof typeof BROWSER_TYPES]> = {
       mobile: "Mobile Browser",
       desktop: "Desktop Browser",
       all: "All",
     };
 
-    const plotData = getSimulationResults(parsedData, metricType, pageName, browserTypeMap[browserType]);
+    const processor = new DataProcessor(parsedData);
+    const plotData = processor.getSimulationResults(metricType, pageName, browserTypeMap[browserType]);
 
     return plotData;
   } catch (e) {
