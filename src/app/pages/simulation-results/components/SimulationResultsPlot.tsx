@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Area,
   CartesianGrid,
@@ -45,21 +52,11 @@ export function SimulationResultPlot({
     [data]
   );
 
-  const updateChartDimensions = useCallback(() => {
-    const chartContainer: HTMLElement = document.querySelector(
-      ".recharts-cartesian-grid"
-    ) as HTMLElement;
+  const chartRef = useRef<HTMLDivElement | null>(null);
 
-    setChartWidth(chartContainer?.offsetWidth);
+  useLayoutEffect(() => {
+    setChartWidth(chartRef.current?.offsetWidth || 0);
   }, []);
-
-  useEffect(() => {
-    window.addEventListener("resize", updateChartDimensions);
-
-    return () => {
-      window.removeEventListener("resize", updateChartDimensions);
-    };
-  }, [updateChartDimensions]);
 
   const xScale = useMemo(
     () => scaleLinear().domain(xDomain).range([0, chartWidth]),
@@ -70,7 +67,7 @@ export function SimulationResultPlot({
     `${(value * 100).toFixed(1)}%`;
 
   return (
-    <div style={{ width: "100%", height: "600px" }}>
+    <div style={{ width: "100%", height: "600px" }} ref={chartRef}>
       <ResponsiveContainer debounce={1} width='99%'>
         <ComposedChart data={plotData}>
           <CartesianGrid strokeDasharray='3 3' />
@@ -117,20 +114,20 @@ export function SimulationResultPlot({
           {/* REFERENCE AREAS ARE NOT RENDERING CORRECTLY BECAUSE THE SCALE IS NOT PROPERLY BEING CALCULATED */}
           {/* ---------------------------------------------------------------------------------------------- */}
 
-          {/* {target && (
+          {target && (
             <>
               {CustomReferenceArea({
-                value: xScale(target),
+                value: chartWidth - xScale(target),
                 fill: Colors.Charts.CategoricalThemed.PurpleRain.Color05
                   .Default,
                 label: "Target",
               })}
             </>
-          )} */}
-          {/* {current && (
+          )}
+          {current && (
             <>
               {CustomReferenceArea({
-                value: xScale(current),
+                value: chartWidth - xScale(current),
                 fill: Colors.Charts.CategoricalThemed.Swamps.Color04.Default,
                 label: "Current",
               })}
@@ -139,12 +136,12 @@ export function SimulationResultPlot({
           {benchmark && (
             <>
               {CustomReferenceArea({
-                value: xScale(benchmark),
+                value: chartWidth - xScale(benchmark),
                 fill: Colors.Charts.CategoricalThemed.Fireplace.Color04.Default,
                 label: "Benchmark",
               })}
             </>
-          )} */}
+          )}
         </ComposedChart>
       </ResponsiveContainer>
     </div>
