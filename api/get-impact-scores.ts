@@ -12,8 +12,9 @@ const schema = Joi.object({
 });
 */
 
-import { BASE_API_URL, USERNAME } from "./constants";
-import { DataProcessor } from "./data-processor";
+import { getMetricsData } from "./application";
+import { evaluateAndReturn } from "./infrastructure";
+import { getFromExternalApi } from "./infrastructure/api-proxy";
 
 type Payload = {
   tenantId: string;
@@ -22,28 +23,18 @@ type Payload = {
 };
 
 export default async function (payload: Payload) {
-  try {
-    // @TODO: Validate payload
-    const { tenantId, appId, dates } = payload;
-
-    const options = {
-      method: "POST",
-      headers: {
-        Authorization: "Basic " + Buffer.from(USERNAME + ":").toString("base64"),
-        "Content-Type": "application/json",
+  return evaluateAndReturn(async () => {
+    const parsedData = await getFromExternalApi(
+      "get_impact_scores/run",
+      {
+        tenant_id: payload.tenantId,
+        app_id: payload.appId,
+        dates: payload.dates,
       },
-      body: JSON.stringify({ tenant_id: tenantId, app_id: appId, dates }),
-    };
+    );
 
-    const response = await fetch(`${BASE_API_URL}get_impact_scores/run`, options);
-    const allData = await response.json();
-    const parsedData = JSON.parse(allData.response);
-
-    const metrics = DataProcessor.getMetricsData(parsedData);
+    const metrics = getMetricsData(parsedData);
 
     return metrics;
-  } catch (e) {
-    console.warn("Error fetching tenants", e);
-    return [];
-  }
+  }, "impact scores");
 }

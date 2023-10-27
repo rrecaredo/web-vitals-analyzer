@@ -1,9 +1,10 @@
-type ResourceEntity = {
-    id: string;
-    name: string;
+interface ResourceEntity {
+  id: string;
+  name: string;
 }
 
-export type Application = ResourceEntity;
-export type Tenant = ResourceEntity & {
-    applications: Application[];
-};
+export interface Application extends ResourceEntity { pages: string[] }
+
+export interface Tenant extends ResourceEntity {
+  applications: Application[];
+}

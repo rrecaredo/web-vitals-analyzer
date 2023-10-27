@@ -4,25 +4,23 @@ import { Tenant } from "./models";
 import fakeDatabase from "./data.json" assert { type: "json" };
 
 export interface AppRepository {
-  getTenants(): Promise<Tenant[]>;
+  getTenantsWithAggregatedData(): Promise<Tenant[]>;
 }
 
 export class FakeFileRepository implements AppRepository {
-  async getTenants(): Promise<Tenant[]> {
-
-    if (!("tenants" in fakeDatabase)) {
-        throw new Error("Missing tenants in fakeDatabase");
-    }
+  async getTenantsWithAggregatedData(): Promise<Tenant[]> {
+    if (fakeDatabase.tenants?.length === 0) return [];
 
     return fakeDatabase.tenants.map(
-      ({ tenant_id, tenant_name, applications }) => ({
+      ({ tenant_id, tenant_name, applications = [] }) => ({
         id: tenant_id,
         name: tenant_name,
-        applications: fakeDatabase.applications
+        applications: (fakeDatabase.applications)
           .filter(({ application_id }) => applications.includes(application_id))
-          .map(({ application_id, application_name }) => ({
+          .map(({ application_id, application_name, pages = [] }) => ({
             id: application_id,
             name: application_name,
+            pages,
           })),
       })
     );

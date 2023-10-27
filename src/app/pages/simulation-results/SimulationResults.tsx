@@ -1,59 +1,43 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import {
   Flex,
   SingleValue,
   Skeleton,
   Surface,
-  TitleBar,
-  showToast,
 } from "@dynatrace/strato-components-preview";
 
-import { useFiltersStore } from "src/app/store";
-import { useFetchSimulationResults } from "./requests";
-import { SimulationResultsFilters } from "./SimulationResultsFilters";
-import { useSimulationResultsFiltersStore } from "./useSimulationResultsFilters.store";
+import { SimulationResultsFilters } from "./components/SimulationResultsFilters";
 import { SimulationResultPlot } from "./components/SimulationResultsPlot";
+import { PageLayout } from "src/app/common";
+import { useSimulationResults } from "./hooks";
 
 export const SimulationResults = () => {
-  const { tenant, application, dateRange } = useFiltersStore();
-  const { browserType, page, metricType } = useSimulationResultsFiltersStore();
-  const { data, isLoading, isFetched, error, request } =
-    useFetchSimulationResults({
-      tenant,
-      app: application,
-      range: dateRange,
-      browserType,
-      pageName: page,
-      metricType,
-    });
+  const {
+    trends,
+    target,
+    current,
+    benchmark,
+    isLoading,
+    isFetched,
+    noData,
+    error,
+    metricType,
+  } = useSimulationResults();
 
-  useEffect(() => {
-    if (error)
-      showToast({
-        type: "critical",
-        title: "Error",
-        message: "Failed to load simulation results",
-      });
-  }, [error]);
-
-  useEffect(() => {
-    // @TODO: Move this to a custom hook
-    if (
-      tenant &&
-      application &&
-      dateRange?.startDate &&
-      dateRange?.endDate &&
-      browserType &&
-      page &&
-      metricType
-    ) {
-      request();
-    }
-  }, [tenant, application, dateRange, request, browserType, page, metricType]);
+  console.log({
+    trends,
+    target,
+    current,
+    benchmark,
+    metricType,
+    isLoading,
+    isFetched,
+    noData,
+    error,
+  });
 
   const content = useMemo(() => {
-    // Order of precedence: Error > Loading > Emptyness
     if (error) {
       return (
         <SingleValue data={""}>
@@ -62,7 +46,7 @@ export const SimulationResults = () => {
       );
     }
 
-    if (!data?.trends?.length && isFetched) {
+    if (noData) {
       return (
         <SingleValue data={""}>
           <SingleValue.EmptyState>No data available</SingleValue.EmptyState>
@@ -73,13 +57,22 @@ export const SimulationResults = () => {
     return isFetched ? (
       <SimulationResultPlot
         metricType={metricType || ""}
-        data={data.trends}
-        target={data.target}
-        current={data.current}
-        benchmark={data.benchmark}
+        data={trends || []}
+        target={target}
+        current={current}
+        benchmark={benchmark}
       />
     ) : null;
-  }, [data, error, isFetched, metricType]);
+  }, [
+    error,
+    isFetched,
+    noData,
+    metricType,
+    benchmark,
+    current,
+    target,
+    trends,
+  ]);
 
   if (error)
     return (
@@ -91,23 +84,14 @@ export const SimulationResults = () => {
   if (isLoading) return <Skeleton />;
 
   return (
-    <>
-      <TitleBar>
-        <TitleBar.Title>Simulation Results</TitleBar.Title>
-      </TitleBar>
-      {/* @TODO; Convert structure to a common component */}
-      <br />
-      <main>
-        {tenant && application && dateRange && (
-          <Flex margin={2} flexDirection='column'>
-            <Surface>
-              <SimulationResultsFilters />
-            </Surface>
-            <br />
-            {content}
-          </Flex>
-        )}
-      </main>
-    </>
+    <PageLayout title='Simulation Results'>
+      <Flex margin={2} flexDirection='column'>
+        <Surface>
+          <SimulationResultsFilters />
+        </Surface>
+        <br />
+        {content}
+      </Flex>
+    </PageLayout>
   );
 };

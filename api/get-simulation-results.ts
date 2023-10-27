@@ -1,5 +1,8 @@
-import { BASE_API_URL, BROWSER_TYPES, USERNAME } from "./constants";
-import { DataProcessor } from "./data-processor";
+import { SimulationResultsMapper } from "./application";
+import { BROWSER_TYPES } from "./constants";
+import { evaluateAndReturn } from "./infrastructure";
+import { getFromExternalApi } from "./infrastructure/api-proxy";
+
 import type { BrowserType } from "./types";
 
 type Payload = {
@@ -12,35 +15,24 @@ type Payload = {
 };
 
 export default async function (payload: Payload) {
-  try {
-    // @TODO: Validate payload
-    const { tenantId, appId, dates, metricType, pageName, browserType } = payload;
+  return evaluateAndReturn(async () => {
+    const parsedData = await getFromExternalApi(
+      "get_simulation_scores/run",
+      {
+        tenant_id: payload.tenantId,
+        app_id: payload.appId,
+        dates: payload.dates,
+      }
+    );
 
-    const options = {
-      method: "POST",
-      headers: {
-        Authorization: "Basic " + Buffer.from(USERNAME + ":").toString("base64"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ tenant_id: tenantId, app_id: appId, dates }),
-    };
+    const processor = new SimulationResultsMapper(parsedData);
 
-    const response = await fetch(`${BASE_API_URL}get_simulation_scores/run`, options);
-    const allData = await response.json();
-    const parsedData = JSON.parse(allData.response);
-
-    const browserTypeMap: Record<BrowserType, typeof BROWSER_TYPES[keyof typeof BROWSER_TYPES]> = {
-      mobile: "Mobile Browser",
-      desktop: "Desktop Browser",
-      all: "All",
-    };
-
-    const processor = new DataProcessor(parsedData);
-    const plotData = processor.getSimulationResults(metricType, pageName, browserTypeMap[browserType]);
+    const plotData = processor.getSimulationResults(
+      payload.metricType,
+      payload.pageName,
+      BROWSER_TYPES[payload.browserType]
+    );
 
     return plotData;
-  } catch (e) {
-    console.warn("Error fetching tenants", e);
-    return [];
-  }
+  }, "simulation results");
 }

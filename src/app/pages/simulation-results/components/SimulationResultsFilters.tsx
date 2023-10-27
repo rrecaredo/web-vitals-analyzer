@@ -9,14 +9,17 @@ import {
 import {
   useSimulationResultsFiltersActions,
   useSimulationResultsFiltersStore,
-} from "./useSimulationResultsFilters.store";
+} from "../simulationResultsFilters.store";
 
-import { BROWSER_TYPES, METRICS_PRESETS, PAGES } from "../constants";
-import { BrowserType, MetricType, PageType } from "src/app/types";
+import { BrowserType, MetricType, PageType } from "src/app/common/types";
+import { usePagesFromSelectedApp } from "../hooks";
+import { METRICS_PRESETS } from "src/app/common";
+import { BROWSER_TYPES } from "api/constants";
 
 export const SimulationResultsFilters = () => {
   const filters = useSimulationResultsFiltersStore();
   const filterActions = useSimulationResultsFiltersActions();
+  const pages = usePagesFromSelectedApp();
 
   const onPageChanged = (ids: PageType[]) => {
     filterActions.setPage(ids?.[0]);
@@ -43,7 +46,7 @@ export const SimulationResultsFilters = () => {
           selectedId={filters.page ? [filters.page] : null}
           onChange={onPageChanged}
         >
-          {PAGES.map((page) => (
+          {pages.map((page) => (
             <SelectOption key={page} id={page}>
               {page}
             </SelectOption>

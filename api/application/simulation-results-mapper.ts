@@ -1,29 +1,9 @@
 import type {
-  InputMetric,
   PredictedOutputMetric,
   SimulationResult,
-} from "./types";
+} from "../types";
 
-// Add the moment this class has 2 responsabilities as it is handling
-// data transformation for both the metrics and the simulation results
-// Consider splitting this class into 2 classes or break it down into
-// normal functions
-export class DataProcessor {
-  static getMetricsData(data: InputMetric[]) {
-    return data.reduce((acc, item) => {
-      const { page_name, analyzed_metric, impact_score } = item;
-      const parsedPageName = page_name.replace(/^.*loading of page /, "");
-
-      return {
-        ...acc,
-        [parsedPageName]: {
-          ...acc[parsedPageName],
-          [analyzed_metric]: impact_score,
-        },
-      };
-    }, {});
-  }
-
+export class SimulationResultsMapper {
   private data: SimulationResult[];
 
   constructor(data: SimulationResult[]) {
@@ -97,5 +77,3 @@ export class DataProcessor {
     return referenceMap;
   }
 }
-
-export default DataProcessor;

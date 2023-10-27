@@ -1,6 +1,6 @@
 import { functions } from "@dynatrace-sdk/app-utils";
 import { useQuery } from "@tanstack/react-query";
-import { BrowserType, MetricType, PageType } from "src/app/types";
+import { BrowserType, MetricType, PageType } from "src/app/common/types";
 
 type FetchSimulationResultsArgs = {
   tenant: string;
@@ -9,6 +9,18 @@ type FetchSimulationResultsArgs = {
   browserType: BrowserType | null;
   metricType: MetricType | null;
   pageName: PageType | null;
+};
+
+type ResponseType = {
+  trends: {
+    median: number;
+    predicted: number;
+    predictedMax: number;
+    predictedMin: number;
+  }[];
+  target: number;
+  current: number;
+  benchmark: number;
 };
 
 const fetchSimulationResults = async ({
@@ -20,7 +32,7 @@ const fetchSimulationResults = async ({
   pageName,
 }: FetchSimulationResultsArgs) => {
   try {
-    const simulationResultResponse = await functions.call(
+    const apiResponse = await functions.call(
       "get-simulation-results",
       {
         data: {
@@ -33,11 +45,17 @@ const fetchSimulationResults = async ({
         },
       }
     );
-    return await simulationResultResponse.json();
+
+    const jsonResponse = await apiResponse.json();
+
+    if (jsonResponse.error) {
+      throw new Error(jsonResponse?.error);
+    }
+
+    return jsonResponse.data;
   } catch (e) {
-    // @TODO: Proper error handling
-    console.warn("Error fetching simulation results", e);
-    return [];
+    console.error("Error fetching tenants", e.message, e.stack);
+    throw e;
   }
 };
 
@@ -61,17 +79,7 @@ export const useFetchSimulationResults = ({
     return simulationResults;
   };
 
-  /*
-  @TODO: Type the response from useQuery, useQuery<ResponseType> where
-  ResponseType should be something like
-  {
-    trends[],
-    current,
-    target,
-    benchmark,
-  }
-  */
-  const { data, refetch, isFetched, isLoading, error } = useQuery({
+  const { data, refetch, isFetched, isLoading, error } = useQuery<ResponseType>({
     enabled: false,
     queryKey: [
       "simulation-results",

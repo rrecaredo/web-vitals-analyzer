@@ -11,7 +11,20 @@
     "applications": [
         {
             "application_id": "APPLICATION-XXXXXXXXXXXXX",
-            "application_name": "Foobar logistics"
+            "application_name": "Foobar logistics",
+            "tenant_id": "xxx00000",
+            "pages": [
+                "/login/otp",
+                "/enrol/fidelity",
+                "/enrol/compare",
+                "/login/page-not-found",
+                "/login/",
+                "/security-profile/update-password",
+                "/login/recover",
+                "/login/account",
+                "/login/undefined",
+                "/enrol/page-not-found"
+            ]
         }
     ]
 }

@@ -1,11 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+
 import {
   Area,
   CartesianGrid,
@@ -15,11 +9,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
+import useResizeObserver from "@react-hook/resize-observer";
 import Colors from "@dynatrace/strato-design-tokens/colors";
 
 import { Impact } from "./types";
 import { useSimulationDataMapping } from "./useSimulationDataMapping";
-import { MetricType } from "src/app/types";
+import { MetricType } from "src/app/common/types";
 import { CustomReferenceArea } from "./CustomReferenceArea";
 import { scaleLinear } from "d3-scale";
 
@@ -46,10 +42,24 @@ export function SimulationResultPlot({
 
   const xDomain = useMemo(
     () => [
-      Math.max(...data.map((d) => d.median)),
-      Math.min(...data.map((d) => d.median)),
+      Math.max(
+        ...[
+          ...data.map((d) => d.median),
+          target || 0,
+          current || 0,
+          benchmark || 0,
+        ]
+      ),
+      Math.min(
+        ...[
+          ...data.map((d) => d.median),
+          target || 0,
+          current || 0,
+          benchmark || 0,
+        ]
+      ),
     ],
-    [data]
+    [benchmark, current, data, target]
   );
 
   const chartRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +67,10 @@ export function SimulationResultPlot({
   useLayoutEffect(() => {
     setChartWidth(chartRef.current?.offsetWidth || 0);
   }, []);
+
+  useResizeObserver(chartRef, (entry) =>
+    setChartWidth(entry.contentRect.width)
+  );
 
   const xScale = useMemo(
     () => scaleLinear().domain(xDomain).range([0, chartWidth]),
@@ -110,17 +124,13 @@ export function SimulationResultPlot({
             fill={Colors.Charts.CategoricalThemed.Swamps.Color01.Default}
             isAnimationActive={false}
           />
-          {/* ---------------------------------------------------------------------------------------------- */}
-          {/* REFERENCE AREAS ARE NOT RENDERING CORRECTLY BECAUSE THE SCALE IS NOT PROPERLY BEING CALCULATED */}
-          {/* ---------------------------------------------------------------------------------------------- */}
-
           {target && (
             <>
               {CustomReferenceArea({
                 value: chartWidth - xScale(target),
                 fill: Colors.Charts.CategoricalThemed.PurpleRain.Color05
                   .Default,
-                label: "Target",
+                label: "target",
               })}
             </>
           )}
@@ -129,7 +139,7 @@ export function SimulationResultPlot({
               {CustomReferenceArea({
                 value: chartWidth - xScale(current),
                 fill: Colors.Charts.CategoricalThemed.Swamps.Color04.Default,
-                label: "Current",
+                label: "current",
               })}
             </>
           )}
@@ -138,7 +148,7 @@ export function SimulationResultPlot({
               {CustomReferenceArea({
                 value: chartWidth - xScale(benchmark),
                 fill: Colors.Charts.CategoricalThemed.Fireplace.Color04.Default,
-                label: "Benchmark",
+                label: "benchmark",
               })}
             </>
           )}

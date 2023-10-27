@@ -6,7 +6,11 @@ type ReferenceAreaProps = {
   label: string;
 };
 
-const getCanvasContext = () => {
+/**
+ * Creates a canvas elenment on the fly with the goal of measuring text
+ * and using the width of the text to position the label on the chart.
+ */
+const getCanvasContext = (): CanvasRenderingContext2D | null => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   if (context) {
@@ -15,9 +19,13 @@ const getCanvasContext = () => {
   return context;
 };
 
-// This is a workaround because I had issues with the recharts official ReferenceArea
-// It didn't like the fact that the domain is reversed and was not drawing the area
-// correctly.
+/**
+ * Custom reference area component that allows for custom labels
+ * and positioning.
+ * @param value - The delta value from the start of the chart
+ * @param fill - The color of the reference area
+ * @param label - The label to display on the chart
+ **/
 export const CustomReferenceArea = ({
   value,
   fill,
@@ -30,32 +38,54 @@ export const CustomReferenceArea = ({
     <>
       <rect
         x={75 + value}
-        y={45}
+        y={25}
         width={40}
-        height='calc(100% - 80px)'
+        height='calc(100% - 60px)'
         fill={fill}
         fillOpacity={0.3}
       />
       <rect
-        x={70 + value}
+        x={getLabelOffset(label) + value}
         y={0}
         width={textMetrics?.width ? textMetrics?.width : 0}
-        height='30'
-        rx='10'
-        ry='10'
+        height='20'
+        rx='5'
+        ry='5'
         fill={fill}
         fillOpacity={0.3}
       />
       <text
-        x={70 + value + (textMetrics?.width ? textMetrics?.width / 2 : 0)}
-        y={15}
+        x={
+          getLabelOffset(label) +
+          value +
+          (textMetrics?.width ? textMetrics?.width / 2 : 0)
+        }
+        y={10}
         textAnchor='middle'
         fill='black'
         dominantBaseline='middle'
-        style={{ fontSize: "12px" }}
+        style={{ fontSize: "12px", fontWeight: "500" }}
       >
         {label}
       </text>
     </>
   );
 };
+
+/**
+ * Helper function to determine the offset of the label
+ * based on the label name.
+ * Label positioning should be deterministic, but for some reason I have not
+ * figured out, the positioning is off by a few pixels so I am forcing a more
+ * accurate positioning with this function.
+ **/
+function getLabelOffset(label: string) {
+  switch (label) {
+    case "target":
+      return 72;
+    case "current":
+      return 60;
+    default:
+      return 50;
+  }
+}

@@ -10,15 +10,19 @@ import {
   showToast,
 } from "@dynatrace/strato-components-preview";
 
-import { useFiltersStore } from "src/app/store";
+import { useFiltersStore } from "src/app/common/store";
 import { useFetchImpactScores } from "./requests";
 import { MetricCell, PageCell, PageColumn } from "./ImpactScores.styled";
 import { getMetricColor } from "./utils";
-import { METRICS_PRESETS } from "../constants";
+import { METRICS_PRESETS } from "src/app/common";
 
 export const ImpactScores = () => {
   const { tenant, application, dateRange } = useFiltersStore();
-  const { data, isLoading, error, request } = useFetchImpactScores();
+  const { data, isLoading, error, request } = useFetchImpactScores({
+    tenant,
+    application,
+    dateRange,
+  });
 
   useEffect(() => {
     if (error)
@@ -31,7 +35,7 @@ export const ImpactScores = () => {
 
   useEffect(() => {
     if (tenant && application && dateRange?.startDate && dateRange?.endDate) {
-      request(tenant, application, dateRange);
+      request();
     }
   }, [tenant, application, dateRange, request]);
 
@@ -79,14 +83,12 @@ export const ImpactScores = () => {
                   </Text>
                 ))}
                 {Object.entries(data)?.map(([_, metrics]) => {
-                  return Object.entries(metrics as Record<string, string>)?.map(
-                    ([_, metricValue], i) => (
-                      <MetricCell
-                        key={i}
-                        color={getMetricColor(Number(metricValue))}
-                      ></MetricCell>
-                    )
-                  );
+                  return Object.entries(metrics)?.map(([_, metricValue], i) => (
+                    <MetricCell
+                      key={i}
+                      color={getMetricColor(Number(metricValue))}
+                    ></MetricCell>
+                  ));
                 })}
               </Grid>
             </Flex>
