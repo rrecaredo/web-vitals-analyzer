@@ -4,13 +4,7 @@ import { Navigate, RouteObject, useRoutes } from "react-router-dom";
 import { Dashboard } from "./pages/dashboard";
 import { ImpactScores } from "./pages/impact-scores";
 import { SimulationResults } from "./pages/simulation-results";
-
-export enum ROUTES {
-  ROOT = "*",
-  DASHBOARD = "dashboard",
-  IMPACT_SCORES = "impact-scores",
-  SIMULATION_RESULTS = "simulation-results",
-}
+import { ROUTES } from "@common/constants";
 
 const routes: RouteObject[] = [
   {

@@ -1,0 +1,42 @@
+[
+    {
+        "id": "1",
+        "name": "tenant1",
+        "applications": [
+            {
+                "id": "1",
+                "name": "app1",
+                "pages": [
+                    {
+                        "id": "1",
+                        "name": "page1"
+                    },
+                    {
+                        "id": "2",
+                        "name": "page2"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "name": "tenant2",
+        "applications": [
+            {
+                "id": "2",
+                "name": "app2",
+                "pages": [
+                    {
+                        "id": "3",
+                        "name": "page3"
+                    },
+                    {
+                        "id": "4",
+                        "name": "page4"
+                    }
+                ]
+            }
+        ]
+    }
+]

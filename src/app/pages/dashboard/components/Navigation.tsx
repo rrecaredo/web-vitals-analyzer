@@ -5,7 +5,7 @@ import { Flex } from "@dynatrace/strato-components-preview";
 import { GridIcon, AnalyticsIcon } from "@dynatrace/strato-icons";
 import { Link } from "@dynatrace/strato-components-preview/typography";
 
-import { ROUTES } from "src/app/App";
+import { ROUTES } from "@common/constants";
 
 const activeLinkStyle = {
   fontWeight: "bold",

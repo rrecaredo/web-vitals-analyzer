@@ -11,10 +11,10 @@ import {
   useSimulationResultsFiltersStore,
 } from "../simulationResultsFilters.store";
 
-import { BrowserType, MetricType, PageType } from "src/app/common/types";
+import { BrowserType, MetricType, PageType } from "@common/types";
 import { usePagesFromSelectedApp } from "../hooks";
-import { METRICS_PRESETS } from "src/app/common";
-import { BROWSER_TYPES } from "api/constants";
+import { METRICS_PRESETS } from "@common/constants";
+import { BROWSER_TYPES } from "@api/constants";
 
 export const SimulationResultsFilters = () => {
   const filters = useSimulationResultsFiltersStore();

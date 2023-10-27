@@ -1,6 +1,6 @@
 import { functions } from "@dynatrace-sdk/app-utils";
 import { useQuery } from "@tanstack/react-query";
-import { BrowserType, MetricType, PageType } from "src/app/common/types";
+import { BrowserType, MetricType, PageType } from "@common/types";
 
 type FetchSimulationResultsArgs = {
   tenant: string;

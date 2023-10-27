@@ -16,7 +16,7 @@ export type InputMetric = {
     dates: string;
     browser_type: string;
     page_name: string;
-    analyzed_metric: string; // @TODO: Use a Union type
+    analyzed_metric: string;
     median: number;
     predicted_exit: number;
     predicted_exit_max: number;

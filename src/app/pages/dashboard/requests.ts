@@ -1,6 +1,6 @@
 import { functions } from "@dynatrace-sdk/app-utils";
 import { useQuery } from "@tanstack/react-query";
-import { Tenant } from "api/infrastructure/models";
+import { Tenant } from "@api/infrastructure/models";
 
 const fetchTenants = async (): Promise<Tenant[]> => {
     try {

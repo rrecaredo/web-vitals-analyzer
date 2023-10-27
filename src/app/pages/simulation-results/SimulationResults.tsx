@@ -7,9 +7,8 @@ import {
   Surface,
 } from "@dynatrace/strato-components-preview";
 
-import { SimulationResultsFilters } from "./components/SimulationResultsFilters";
-import { SimulationResultPlot } from "./components/SimulationResultsPlot";
-import { PageLayout } from "src/app/common";
+import { SimulationResultsFilters, SimulationResultPlot } from "./components";
+import { PageLayout } from "@common/components";
 import { useSimulationResults } from "./hooks";
 
 export const SimulationResults = () => {

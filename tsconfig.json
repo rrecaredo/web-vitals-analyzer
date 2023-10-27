@@ -5,21 +5,45 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "importHelpers": false,  /* Import emit helpers from 'tslib'. */
+    "importHelpers": false, /* Import emit helpers from 'tslib'. */
     "jsx": "react",
-    "lib": ["DOM", "DOM.Iterable", "esnext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "esnext"
+    ],
+    "paths": {
+      "@pages/*": [
+        "./src/app/pages/*"
+      ],
+      "@common/*": [
+        "./src/app/common/*"
+      ],
+      "@api/*": [
+        "./api/*"
+      ],
+    },
     "module": "ESNext",
     "moduleResolution": "node",
-    "paths": {},
     "rootDir": ".",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true, /* Skip type checking of declaration files. */
     "sourceMap": true,
     "strictNullChecks": true,
     "target": "ESNext",
-    "types": ["node"],
-    "typeRoots": ["./node_modules/@types", "./node_modules/@dynatrace"]
+    "types": [
+      "node",
+      "jest"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@dynatrace"
+    ]
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

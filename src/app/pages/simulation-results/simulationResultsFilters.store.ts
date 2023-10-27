@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { mountStoreDevtool } from "simple-zustand-devtools";
-import { BrowserType, MetricType, PageType } from "src/app/common/types";
+import { BrowserType, MetricType, PageType } from "@common/types";
 
 type Actions = {
   setPage: (page: PageType) => void;

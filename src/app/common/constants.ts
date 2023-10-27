@@ -1,3 +1,10 @@
+export enum ROUTES {
+  ROOT = "*",
+  DASHBOARD = "dashboard",
+  IMPACT_SCORES = "impact-scores",
+  SIMULATION_RESULTS = "simulation-results",
+}
+
 export const METRICS_PRESETS = [
   {
     name: "Request Start",

@@ -13,10 +13,10 @@ import {
 import useResizeObserver from "@react-hook/resize-observer";
 import Colors from "@dynatrace/strato-design-tokens/colors";
 
-import { Impact } from "./types";
+import { Impact } from "../types";
 import { useSimulationDataMapping } from "./useSimulationDataMapping";
-import { MetricType } from "src/app/common/types";
-import { CustomReferenceArea } from "./CustomReferenceArea";
+import { MetricType } from "@common/types";
+import { CustomReferenceArea } from "../CustomReferenceArea";
 import { scaleLinear } from "d3-scale";
 
 export type ThresholdProps = {

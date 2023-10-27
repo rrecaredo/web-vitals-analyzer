@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { showToast } from "@dynatrace/strato-components-preview";
 
-import { useFiltersStore } from "src/app/common";
+import { useFiltersStore } from "@common/store";
 import { useFetchSimulationResults } from "../requests";
 import { useSimulationResultsFiltersStore } from "../simulationResultsFilters.store";
 

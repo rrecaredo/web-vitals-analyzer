@@ -1,12 +1,19 @@
-import { useFiltersStore } from "src/app/common/store";
+import { useFiltersStore } from "@common/store";
 import { useFetchTenants } from "../../dashboard/requests";
+import { useMemo } from "react";
 
 export const usePagesFromSelectedApp = () => {
-    const { tenant, application } = useFiltersStore();
-    const { data: tenants } = useFetchTenants();
+  const { tenant, application } = useFiltersStore();
+  const { data: tenants } = useFetchTenants();
 
+  const pages = useMemo(() => {
     const selectedTenant = tenants?.find((t) => t.id === tenant);
-    const selectedApp = selectedTenant?.applications.find((a) => a.id === application);
+    const selectedApp = selectedTenant?.applications.find(
+      (a) => a.id === application
+    );
 
     return selectedApp?.pages ?? [];
-}
+  }, [application, tenant, tenants]);
+
+  return pages;
+};

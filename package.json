@@ -12,7 +12,8 @@
     "info": "dt-app info",
     "help": "dt-app help",
     "lint": "eslint .",
-    "test:api": "jest --config=api/jest.config.js"
+    "test:api": "jest --config=api/jest.config.js",
+    "test:ui": "jest --config=jest.config.js"
   },
   "engines": {
     "node": ">=16.13.0"
@@ -20,6 +21,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.23.0",
+    "@babel/preset-env": "^7.23.2",
+    "@babel/preset-react": "^7.22.15",
+    "@babel/preset-typescript": "^7.23.2",
     "@dynatrace-sdk/app-environment": "1.0.1",
     "@dynatrace-sdk/app-utils": "^0.4.1",
     "@dynatrace-sdk/client-query": "1.4.3",
@@ -30,9 +35,12 @@
     "@react-hook/resize-observer": "^1.2.6",
     "@tanstack/react-query": "^5.0.0",
     "@tanstack/react-query-devtools": "^5.0.3",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/react-hooks": "^8.0.1",
+    "babel-jest": "^29.7.0",
     "d3-scale": "^4.0.2",
     "immer": "^10.0.3",
+    "msw": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^6.5.0",

@@ -25,7 +25,7 @@ type State = {
   actions: Actions;
 };
 
-const useFilters = create(
+export const useFilters = create(
   immer<State>((set) => ({
     filters: {
       tenant: "",

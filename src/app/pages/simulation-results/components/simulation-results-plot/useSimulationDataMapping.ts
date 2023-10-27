@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Impact } from "./types";
+import { Impact } from "../types";
 
 export const useSimulationDataMapping = (data: Impact[] = []) => {
   return useMemo(

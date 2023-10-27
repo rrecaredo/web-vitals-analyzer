@@ -3,7 +3,7 @@ import { useOutlet } from "react-router-dom";
 
 import { Page } from "@dynatrace/strato-components-preview/layouts";
 
-import { useFiltersStore } from "src/app/common/store";
+import { useFiltersStore } from "@common/store";
 import { Filters, Navigation } from "./components";
 
 export const Dashboard = () => {

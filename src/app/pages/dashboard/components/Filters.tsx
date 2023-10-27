@@ -14,8 +14,8 @@ import {
 
 import { ProgressCircle } from "@dynatrace/strato-components-preview/core";
 import { XmarkIcon } from "@dynatrace/strato-icons";
-import { useFiltersActions, useFiltersStore } from "src/app/common/store";
-import { formatDate } from "src/app/common/utils";
+import { useFiltersActions, useFiltersStore } from "@common/store";
+import { formatDate } from "@common/utils";
 import { useFetchTenants } from "../requests";
 
 const LogoArea = styled.div`
