@@ -2,15 +2,35 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch via NPM",
+      "request": "launch",
+      "runtimeArgs": [
+        "start",
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
       "name": "Launch app for function debugging",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start"],
+      "runtimeArgs": [
+        "run-script",
+        "start"
+      ],
       "type": "node",
-      "resolveSourceMapLocations": ["**/*.js", "**/*.ts"],
+      "resolveSourceMapLocations": [
+        "**/*.js",
+        "**/*.ts"
+      ],
       // The folder name `api` needs to be adjusted if `build.functions.input`
       // is changed in app.config.ts
-      "runtimeSourcemapPausePatterns": ["**/api/**/*"],
+      "runtimeSourcemapPausePatterns": [
+        "**/api/**/*"
+      ],
     },
     {
       "name": "Launch Chrome for UI debugging",

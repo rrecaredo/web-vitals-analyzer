@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": false,
+    "target": "esnext",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": [
+      "esnext",
+      "es2021.intl"
+    ],
+    "types": [
+      "@dynatrace/runtime-simulator/types",
+      "jest"
+    ]
+  }
+}

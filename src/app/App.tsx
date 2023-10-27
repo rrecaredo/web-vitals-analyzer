@@ -1,22 +1,39 @@
-import { Page } from "@dynatrace/strato-components-preview";
 import React from "react";
-import { Route, Routes } from "react-router-dom";
-import { Data } from "./pages/Data";
-import { Header } from "./components/Header";
-import { Home } from "./pages/Home";
+import { Navigate, RouteObject, useRoutes } from "react-router-dom";
+
+import { Dashboard } from "./pages/dashboard";
+import { ImpactScores } from "./pages/impact-scores";
+import { SimulationResults } from "./pages/simulation-results";
+
+export enum ROUTES {
+  ROOT = "*",
+  DASHBOARD = "dashboard",
+  IMPACT_SCORES = "impact-scores",
+  SIMULATION_RESULTS = "simulation-results",
+}
+
+const routes: RouteObject[] = [
+  {
+    path: ROUTES.ROOT,
+    element: <Navigate to={ROUTES.DASHBOARD} replace />,
+  },
+  {
+    path: ROUTES.DASHBOARD,
+    element: <Dashboard />,
+    children: [
+      {
+        path: ROUTES.IMPACT_SCORES,
+        element: <ImpactScores />,
+      },
+      {
+        path: ROUTES.SIMULATION_RESULTS,
+        element: <SimulationResults />,
+      },
+    ],
+  },
+];
 
 export const App = () => {
-  return (
-    <Page>
-      <Page.Header>
-        <Header />
-      </Page.Header>
-      <Page.Main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/data" element={<Data />} />
-        </Routes>
-      </Page.Main>
-    </Page>
-  );
+  const rendered = useRoutes(routes);
+  return <>{rendered}</>;
 };
