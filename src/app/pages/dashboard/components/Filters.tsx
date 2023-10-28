@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
 
 import {
   Flex,
@@ -17,10 +16,6 @@ import { XmarkIcon } from "@dynatrace/strato-icons";
 import { useFiltersActions, useFilters } from "@common/store";
 import { formatDate } from "@common/utils";
 import { useFetchTenants } from "../requests";
-
-const LogoArea = styled.div`
-  width: 200px;
-`;
 
 export const Filters = () => {
   const { data, error, isLoading } = useFetchTenants();
@@ -81,7 +76,6 @@ export const Filters = () => {
 
   return (
     <Flex mb={8} mt={8} alignItems='center'>
-      <LogoArea></LogoArea>
       <FilterBar
         onFilterChange={() => {
           // I am handling changes granularly in the select components

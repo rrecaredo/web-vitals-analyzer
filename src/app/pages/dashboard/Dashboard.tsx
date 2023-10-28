@@ -5,6 +5,14 @@ import { Page } from "@dynatrace/strato-components-preview/layouts";
 
 import { useFilters } from "@common/store";
 import { Filters, Navigation } from "./components";
+import styled from "styled-components";
+import { Flex } from "@dynatrace/strato-components-preview";
+
+const LogoArea = styled.div`
+  width: 200px;
+  text-align: left;
+  padding-left: 8px;
+`;
 
 export const Dashboard = () => {
   const outlet = useOutlet();
@@ -16,7 +24,17 @@ export const Dashboard = () => {
   return (
     <Page>
       <Page.Header>
-        <Filters />
+        <Flex alignItems='center'>
+          <LogoArea>
+            <img
+              src='./assets/logo.png'
+              alt='logo'
+              width='100px'
+              height='25px'
+            />
+          </LogoArea>
+          <Filters />
+        </Flex>
       </Page.Header>
       {isContentUnblocked && (
         <>

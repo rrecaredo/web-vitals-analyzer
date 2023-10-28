@@ -2,10 +2,11 @@ import React from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import { Flex } from "@dynatrace/strato-components-preview";
-import { GridIcon, AnalyticsIcon } from "@dynatrace/strato-icons";
 import { Link } from "@dynatrace/strato-components-preview/typography";
+import { GridIcon, AnalyticsIcon } from "@dynatrace/strato-icons";
 
 import { ROUTES } from "@common/constants";
+import { NavItem } from "./Navigation.styled";
 
 const activeLinkStyle = {
   fontWeight: "bold",
@@ -17,7 +18,7 @@ export const Navigation = () => {
 
   return (
     <Flex flexDirection='column'>
-      <Flex>
+      <NavItem>
         <GridIcon />
         <Link
           as={RouterLink}
@@ -30,8 +31,8 @@ export const Navigation = () => {
         >
           Impact Scores
         </Link>
-      </Flex>
-      <Flex>
+      </NavItem>
+      <NavItem>
         <AnalyticsIcon />
         <Link
           as={RouterLink}
@@ -44,7 +45,7 @@ export const Navigation = () => {
         >
           Simulation Results
         </Link>
-      </Flex>
+      </NavItem>
     </Flex>
   );
 };
