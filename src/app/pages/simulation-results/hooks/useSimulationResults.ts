@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { showToast } from "@dynatrace/strato-components-preview";
 
-import { useFiltersStore } from "@common/store";
+import { useFilters } from "@common/store";
 import { useFetchSimulationResults } from "../requests";
-import { useSimulationResultsFiltersStore } from "../simulationResultsFilters.store";
+import { useSimulationResultsFilters } from "../simulationResultsFilters.store";
 
 export const useSimulationResults = () => {
-  const { tenant, application, dateRange } = useFiltersStore();
-  const { browserType, page, metricType } = useSimulationResultsFiltersStore();
+  const { tenant, application, dateRange } = useFilters();
+  const { browserType, page, metricType } = useSimulationResultsFilters();
 
   const { data, isLoading, isFetched, error, request } =
     useFetchSimulationResults({

@@ -17,7 +17,7 @@ export type InputMetric = {
     browser_type: string;
     page_name: string;
     analyzed_metric: string;
-    median: number;
+    median: number | null;
     predicted_exit: number;
     predicted_exit_max: number;
     predicted_exit_min: number;

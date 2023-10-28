@@ -10,14 +10,14 @@ import {
   showToast,
 } from "@dynatrace/strato-components-preview";
 
-import { useFiltersStore } from "@common/store";
+import { useFilters } from "@common/store";
 import { useFetchImpactScores } from "./requests";
 import { MetricCell, PageCell, PageColumn } from "./ImpactScores.styled";
 import { getMetricColor } from "./utils";
 import { METRICS_PRESETS } from "@common/constants";
 
 export const ImpactScores = () => {
-  const { tenant, application, dateRange } = useFiltersStore();
+  const { tenant, application, dateRange } = useFilters();
   const { data, isLoading, error, request } = useFetchImpactScores({
     tenant,
     application,

@@ -25,7 +25,7 @@ type State = {
   actions: Actions;
 };
 
-export const useFilters = create(
+export const useFiltersStore = create(
   immer<State>((set) => ({
     filters: {
       tenant: "",
@@ -61,7 +61,7 @@ export const useFilters = create(
   }))
 );
 
-export const useFiltersStore = () => useFilters((state) => state.filters);
-export const useFiltersActions = () => useFilters((state) => state.actions);
+export const useFilters = () => useFiltersStore((state) => state.filters);
+export const useFiltersActions = () => useFiltersStore((state) => state.actions);
 
-mountStoreDevtool("Global Filters Store", useFilters);
+mountStoreDevtool("Global Filters Store", useFiltersStore);

@@ -14,7 +14,7 @@ import {
 
 import { ProgressCircle } from "@dynatrace/strato-components-preview/core";
 import { XmarkIcon } from "@dynatrace/strato-icons";
-import { useFiltersActions, useFiltersStore } from "@common/store";
+import { useFiltersActions, useFilters } from "@common/store";
 import { formatDate } from "@common/utils";
 import { useFetchTenants } from "../requests";
 
@@ -24,7 +24,7 @@ const LogoArea = styled.div`
 
 export const Filters = () => {
   const { data, error, isLoading } = useFetchTenants();
-  const filters = useFiltersStore();
+  const filters = useFilters();
   const filterActions = useFiltersActions();
 
   const tenantOptions = useMemo(() => {

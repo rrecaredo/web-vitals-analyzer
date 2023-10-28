@@ -3,12 +3,12 @@ import { useOutlet } from "react-router-dom";
 
 import { Page } from "@dynatrace/strato-components-preview/layouts";
 
-import { useFiltersStore } from "@common/store";
+import { useFilters } from "@common/store";
 import { Filters, Navigation } from "./components";
 
 export const Dashboard = () => {
   const outlet = useOutlet();
-  const { tenant, application, dateRange } = useFiltersStore();
+  const { tenant, application, dateRange } = useFilters();
 
   const isContentUnblocked =
     tenant && application && dateRange?.startDate && dateRange?.endDate;

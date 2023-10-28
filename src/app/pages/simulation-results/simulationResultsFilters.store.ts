@@ -20,7 +20,7 @@ type State = {
   actions: Actions;
 };
 
-const useFilters = create(
+export const useSimulationResultsFiltersStore = create(
   immer<State>((set) => ({
     filters: {
       page: null,
@@ -47,7 +47,13 @@ const useFilters = create(
   }))
 );
 
-export const useSimulationResultsFiltersStore = () => useFilters((state) => state.filters);
-export const useSimulationResultsFiltersActions = () => useFilters((state) => state.actions);
+export const useSimulationResultsFilters = () =>
+  useSimulationResultsFiltersStore((state) => state.filters);
 
-mountStoreDevtool("SimulationResultsFilters Store", useFilters);
+export const useSimulationResultsFiltersActions = () =>
+  useSimulationResultsFiltersStore((state) => state.actions);
+
+mountStoreDevtool(
+  "SimulationResultsFilters Store",
+  useSimulationResultsFiltersStore
+);

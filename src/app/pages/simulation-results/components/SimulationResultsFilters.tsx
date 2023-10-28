@@ -8,7 +8,7 @@ import {
 
 import {
   useSimulationResultsFiltersActions,
-  useSimulationResultsFiltersStore,
+  useSimulationResultsFilters,
 } from "../simulationResultsFilters.store";
 
 import { BrowserType, MetricType, PageType } from "@common/types";
@@ -17,7 +17,7 @@ import { METRICS_PRESETS } from "@common/constants";
 import { BROWSER_TYPES } from "@api/constants";
 
 export const SimulationResultsFilters = () => {
-  const filters = useSimulationResultsFiltersStore();
+  const filters = useSimulationResultsFilters();
   const filterActions = useSimulationResultsFiltersActions();
   const pages = usePagesFromSelectedApp();
 

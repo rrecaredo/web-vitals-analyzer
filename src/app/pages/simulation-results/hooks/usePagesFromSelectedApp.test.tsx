@@ -2,12 +2,13 @@ import React from "react";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { renderHook } from "@testing-library/react-hooks";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { cleanup } from "@testing-library/react";
+
+import { usePagesFromSelectedApp } from "./usePagesFromSelectedApp";
+import { useFiltersStore } from "@common/store";
 
 import tenants from "./__fixtures__/tenants.json";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { usePagesFromSelectedApp } from "./usePagesFromSelectedApp";
-import { useFilters } from "@common/store";
-import { cleanup } from "@testing-library/react";
 
 const apiHandlers = [
   http.get("*/api/get-tenants*", () => {
@@ -32,7 +33,7 @@ const queryClient = new QueryClient({
 });
 
 const Wrapper = ({ children }) => {
-  useFilters.setState((prev) => ({
+  useFiltersStore.setState((prev) => ({
     ...prev,
     filters: {
       tenant: "2",
@@ -66,16 +67,7 @@ describe("usePagesFromSelectedApp", () => {
 
     await waitForNextUpdate();
 
-    expect(result.current).toEqual([
-      {
-        id: "3",
-        name: "page3",
-      },
-      {
-        id: "4",
-        name: "page4",
-      },
-    ]);
+    expect(result.current).toEqual(["page3", "page4"]);
 
     unmount();
   });

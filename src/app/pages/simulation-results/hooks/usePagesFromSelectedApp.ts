@@ -1,9 +1,9 @@
-import { useFiltersStore } from "@common/store";
+import { useFilters } from "@common/store";
 import { useFetchTenants } from "../../dashboard/requests";
 import { useMemo } from "react";
 
 export const usePagesFromSelectedApp = () => {
-  const { tenant, application } = useFiltersStore();
+  const { tenant, application } = useFilters();
   const { data: tenants } = useFetchTenants();
 
   const pages = useMemo(() => {

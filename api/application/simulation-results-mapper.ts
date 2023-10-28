@@ -3,6 +3,8 @@ import type {
   SimulationResult,
 } from "../types";
 
+type TypePrediction = "current" | "target" | "benchmark";
+
 export class SimulationResultsMapper {
   private data: SimulationResult[];
 
@@ -56,7 +58,7 @@ export class SimulationResultsMapper {
   }
 
   private getReferencePoints(data: SimulationResult[]) {
-    const referenceMap: { [key: string]: number | undefined } = {
+    const referenceMap: Record<TypePrediction, number | undefined> = {
       current: undefined,
       target: undefined,
       benchmark: undefined,
@@ -66,7 +68,7 @@ export class SimulationResultsMapper {
       const typePrediction = spec.type_prediction as keyof typeof referenceMap;
 
       if (typePrediction in referenceMap) {
-        referenceMap[typePrediction] = spec.median;
+        referenceMap[typePrediction] = spec.median ?? undefined;
       }
 
       if (Object.values(referenceMap).every((value) => value !== undefined)) {

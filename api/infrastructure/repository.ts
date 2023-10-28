@@ -1,7 +1,7 @@
 import { Tenant } from "./models";
 
 // fakeDatabase simulates a relational database containing tenants, applications and their relationships.
-import fakeDatabase from "./data.json" assert { type: "json" };
+import * as fakeDatabase from "./data.json";
 
 export interface AppRepository {
   getTenantsWithAggregatedData(): Promise<Tenant[]>;
