@@ -50,7 +50,7 @@ export const useSimulationResults = () => {
     metricType,
     trends: data?.trends,
     target: data?.target,
-    current: data?.current,
+    current: data?.current_value,
     benchmark: data?.benchmark,
   };
 };

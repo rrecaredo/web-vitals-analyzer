@@ -3,4 +3,5 @@ export type Impact = {
     predicted: number;
     predictedMin: number;
     predictedMax: number;
+    fakeValue?: number;
   };

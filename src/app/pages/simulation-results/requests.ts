@@ -19,7 +19,7 @@ type ResponseType = {
     predictedMin: number;
   }[];
   target: number;
-  current: number;
+  current_value: number;
   benchmark: number;
 };
 

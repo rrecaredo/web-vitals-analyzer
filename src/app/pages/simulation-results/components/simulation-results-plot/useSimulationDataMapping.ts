@@ -1,6 +1,13 @@
 import { useMemo } from "react";
 import { Impact } from "../types";
 
+type SimulationDataAggregated = {
+  median?: number;
+  predicted?: number;
+  predictedRange?: [number, number];
+  fakeValue?: number;
+};
+
 export const useSimulationDataMapping = (data: Impact[] = []) => {
   return useMemo(
     () =>
@@ -8,7 +15,8 @@ export const useSimulationDataMapping = (data: Impact[] = []) => {
         median,
         predicted,
         predictedRange: [predictedMin, predictedMax],
-      })),
+        fakeValue: undefined,
+      } as SimulationDataAggregated)),
     [data]
   );
 };

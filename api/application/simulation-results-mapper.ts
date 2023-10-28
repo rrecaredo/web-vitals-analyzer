@@ -3,7 +3,7 @@ import type {
   SimulationResult,
 } from "../types";
 
-type TypePrediction = "current" | "target" | "benchmark";
+type TypePrediction = "current_value" | "target" | "benchmark";
 
 export class SimulationResultsMapper {
   private data: SimulationResult[];
@@ -61,7 +61,7 @@ export class SimulationResultsMapper {
 
   private getReferencePoints(data: SimulationResult[] = []) {
     const referenceMap: Record<TypePrediction, number | undefined> = {
-      current: undefined,
+      current_value: undefined,
       target: undefined,
       benchmark: undefined,
     };

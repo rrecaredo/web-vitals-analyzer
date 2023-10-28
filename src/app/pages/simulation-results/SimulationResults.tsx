@@ -24,18 +24,6 @@ export const SimulationResults = () => {
     metricType,
   } = useSimulationResults();
 
-  console.log({
-    trends,
-    target,
-    current,
-    benchmark,
-    metricType,
-    isLoading,
-    isFetched,
-    noData,
-    error,
-  });
-
   const content = useMemo(() => {
     if (error) {
       return (

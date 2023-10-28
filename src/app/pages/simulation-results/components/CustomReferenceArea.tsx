@@ -37,7 +37,7 @@ export const CustomReferenceArea = ({
   return (
     <>
       <rect
-        x={75 + value}
+        x={value}
         y={25}
         width={40}
         height='calc(100% - 60px)'
@@ -82,10 +82,10 @@ export const CustomReferenceArea = ({
 function getLabelOffset(label: string) {
   switch (label) {
     case "target":
-      return 72;
+      return -2;
     case "current":
-      return 60;
+      return -6;
     default:
-      return 50;
+      return -20;
   }
 }
