@@ -4,3 +4,4 @@ app.config.ts
 babel.config.js
 jest.config.js
 setupTests.js
+inject-secrets
