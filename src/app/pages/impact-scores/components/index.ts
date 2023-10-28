@@ -1,1 +1,1 @@
-export * from "./ImpactScoresTable"
+export * from "./ImpactScoresSection";

@@ -12,49 +12,51 @@ type ImpactScoresTableProps = {
 
 export const ImpactScoresTable = ({ data }: ImpactScoresTableProps) => {
   return (
-    <Flex gap={0}>
-      <PageColumn
-        flexDirection='column'
-        gap={0}
-        paddingLeft={4}
-        paddingRight={4}
-        style={{ background: "white" }}
-      >
-        {Object.keys(data)?.map((page) => (
-          <PageCell key={page}>
-            <Strong>{page}</Strong>
-          </PageCell>
-        ))}
-      </PageColumn>
-      <Flex
-        flexGrow={1}
-        flexWrap='wrap'
-        flexDirection='column'
-        style={{ position: "relative" }}
-      >
-        <Grid
-          gridTemplateColumns='repeat(11, 1fr);'
-          style={{ position: "absolute", top: "-36px" }}
+    <div className='impact-scores-table'>
+      <Flex gap={0} mt={64}>
+        <PageColumn
+          flexDirection='column'
+          gap={0}
+          paddingLeft={4}
+          paddingRight={4}
+          style={{ background: "white" }}
         >
-          {METRICS_PRESETS.map((metric) => (
-            <Text
-              key={metric.name}
-              textStyle='small-emphasized'
-              style={{ textAlign: "center" }}
-            >
-              {metric.name}
-            </Text>
+          {Object.keys(data)?.map((page) => (
+            <PageCell key={page}>
+              <Strong>{page}</Strong>
+            </PageCell>
           ))}
-          {Object.entries(data)?.map(([_, metrics]) => {
-            return Object.entries(metrics)?.map(([_, metricValue], i) => (
-              <MetricCell
-                key={i}
-                color={getMetricColor(Number(metricValue))}
-              ></MetricCell>
-            ));
-          })}
-        </Grid>
+        </PageColumn>
+        <Flex
+          flexGrow={1}
+          flexWrap='wrap'
+          flexDirection='column'
+          style={{ position: "relative" }}
+        >
+          <Grid
+            gridTemplateColumns='repeat(11, 1fr);'
+            style={{ position: "absolute", top: "-36px" }}
+          >
+            {METRICS_PRESETS.map((metric) => (
+              <Text
+                key={metric.name}
+                textStyle='small-emphasized'
+                style={{ textAlign: "center" }}
+              >
+                {metric.name}
+              </Text>
+            ))}
+            {Object.entries(data)?.map(([_, metrics]) => {
+              return Object.entries(metrics)?.map(([_, metricValue], i) => (
+                <MetricCell
+                  key={i}
+                  color={getMetricColor(Number(metricValue))}
+                ></MetricCell>
+              ));
+            })}
+          </Grid>
+        </Flex>
       </Flex>
-    </Flex>
+    </div>
   );
 };

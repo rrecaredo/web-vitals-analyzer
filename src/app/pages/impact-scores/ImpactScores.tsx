@@ -9,7 +9,7 @@ import {
 
 import { useFilters } from "@common/store";
 import { useFetchImpactScores } from "./requests";
-import { ImpactScoresTable } from "./components";
+import { ImpactScoresSection } from "./components";
 
 export const ImpactScores = () => {
   const { tenant, application, dateRange } = useFilters();
@@ -41,9 +41,7 @@ export const ImpactScores = () => {
       <TitleBar>
         <TitleBar.Title>Impact Scores</TitleBar.Title>
       </TitleBar>
-      <main style={{ marginTop: "80px" }}>
-        {data && <ImpactScoresTable data={data} />}
-      </main>
+      <main>{data && <ImpactScoresSection data={data} />}</main>
     </>
   );
 };
