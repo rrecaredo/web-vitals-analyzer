@@ -5,6 +5,7 @@ import {
   Text,
   Surface,
   Heading,
+  Tooltip,
 } from "@dynatrace/strato-components-preview";
 
 import { METRICS_PRESETS } from "@common/constants";
@@ -39,9 +40,11 @@ export const ImpactScoresList = ({ data }: ImpactScoresListProps) => {
                 >
                   {metric.name}
                 </Text>
-                <MetricCell
-                  color={getMetricColor(Number(data[page][metric.accessor]))}
-                ></MetricCell>
+                <Tooltip text={data[page][metric.accessor]} delay='none'>
+                  <MetricCell
+                    color={getMetricColor(Number(data[page][metric.accessor]))}
+                  ></MetricCell>
+                </Tooltip>
               </React.Fragment>
             ))}
           </Grid>

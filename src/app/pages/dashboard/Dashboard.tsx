@@ -1,25 +1,29 @@
-import React from "react";
-import { useOutlet } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { useNavigate, useOutlet } from "react-router-dom";
 
 import { Page } from "@dynatrace/strato-components-preview/layouts";
 
 import { useFilters } from "@common/store";
 import { Filters, Navigation } from "./components";
-import styled from "styled-components";
 import { Flex } from "@dynatrace/strato-components-preview";
-
-const LogoArea = styled.div`
-  width: 200px;
-  text-align: left;
-  padding-left: 8px;
-`;
+import { LogoArea } from "./Dashboard.styled";
+import { ROUTES } from "@common/constants";
 
 export const Dashboard = () => {
   const outlet = useOutlet();
   const { tenant, application, dateRange } = useFilters();
+  const navigate = useNavigate();
+  const firstNavigation = useRef(true);
 
   const isContentUnblocked =
     tenant && application && dateRange?.startDate && dateRange?.endDate;
+
+  useEffect(() => {
+    if (isContentUnblocked && !firstNavigation.current) {
+      firstNavigation.current = false;
+      navigate(ROUTES.IMPACT_SCORES);
+    }
+  }, [isContentUnblocked, navigate]);
 
   return (
     <Page>

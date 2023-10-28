@@ -1,5 +1,11 @@
 import React from "react";
-import { Flex, Strong, Grid, Text } from "@dynatrace/strato-components-preview";
+import {
+  Flex,
+  Strong,
+  Grid,
+  Text,
+  Tooltip,
+} from "@dynatrace/strato-components-preview";
 
 import { METRICS_PRESETS } from "@common/constants";
 import { PageColumn, PageCell, MetricCell } from "../ImpactScores.styled";
@@ -48,10 +54,11 @@ export const ImpactScoresTable = ({ data }: ImpactScoresTableProps) => {
             ))}
             {Object.entries(data)?.map(([_, metrics]) => {
               return Object.entries(metrics)?.map(([_, metricValue], i) => (
-                <MetricCell
-                  key={i}
-                  color={getMetricColor(Number(metricValue))}
-                ></MetricCell>
+                <Tooltip key={i} text={metricValue} delay='none'>
+                  <MetricCell
+                    color={getMetricColor(Number(metricValue))}
+                  ></MetricCell>
+                </Tooltip>
               ));
             })}
           </Grid>
