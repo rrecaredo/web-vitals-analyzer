@@ -2,15 +2,10 @@ import React from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import { Flex } from "@dynatrace/strato-components-preview";
-import { Link } from "@dynatrace/strato-components-preview/typography";
 import { GridIcon, AnalyticsIcon } from "@dynatrace/strato-icons";
 
 import { ROUTES } from "@common/constants";
-import { NavItem } from "./Navigation.styled";
-
-const activeLinkStyle = {
-  fontWeight: "bold",
-};
+import { NavItem, NavLink } from "./Navigation.styled";
 
 export const Navigation = () => {
   const location = useLocation();
@@ -18,33 +13,25 @@ export const Navigation = () => {
 
   return (
     <Flex flexDirection='column'>
-      <NavItem>
+      <NavItem aria-label='Impact Scores'>
         <GridIcon />
-        <Link
+        <NavLink
           as={RouterLink}
-          style={
-            currentPath.includes(ROUTES.IMPACT_SCORES)
-              ? activeLinkStyle
-              : undefined
-          }
+          isActive={currentPath.includes(ROUTES.IMPACT_SCORES)}
           to={`./${ROUTES.IMPACT_SCORES}`}
         >
           Impact Scores
-        </Link>
+        </NavLink>
       </NavItem>
       <NavItem>
         <AnalyticsIcon />
-        <Link
+        <NavLink
           as={RouterLink}
-          style={
-            currentPath.includes(ROUTES.SIMULATION_RESULTS)
-              ? activeLinkStyle
-              : undefined
-          }
+          isActive={currentPath.includes(ROUTES.SIMULATION_RESULTS)}
           to={`./${ROUTES.SIMULATION_RESULTS}`}
         >
           Simulation Results
-        </Link>
+        </NavLink>
       </NavItem>
     </Flex>
   );

@@ -16,14 +16,14 @@ export const Dashboard = () => {
   const firstNavigation = useRef(true);
 
   const isContentUnblocked =
-    tenant && application && dateRange?.startDate && dateRange?.endDate;
+    !!tenant && !!application && !!dateRange?.startDate && !!dateRange?.endDate;
 
   useEffect(() => {
-    if (isContentUnblocked && !firstNavigation.current) {
+    if (isContentUnblocked && firstNavigation.current) {
       firstNavigation.current = false;
       navigate(ROUTES.IMPACT_SCORES);
     }
-  }, [isContentUnblocked, navigate]);
+  }, [isContentUnblocked, navigate, firstNavigation]);
 
   return (
     <Page>
