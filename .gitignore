@@ -34,3 +34,6 @@
 # System Files
 .DS_Store
 Thumbs.db
+
+# Secrets
+environment.ts
