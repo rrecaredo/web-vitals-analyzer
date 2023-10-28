@@ -8,8 +8,8 @@ type TypePrediction = "current" | "target" | "benchmark";
 export class SimulationResultsMapper {
   private data: SimulationResult[];
 
-  constructor(data: SimulationResult[]) {
-    this.data = data;
+  constructor(data: SimulationResult[] = []) {
+    this.data = Array.from(data);
   }
 
   getSimulationResults(
@@ -33,7 +33,7 @@ export class SimulationResultsMapper {
     };
   }
 
-  private getTrendData(data: SimulationResult[]) {
+  private getTrendData(data: SimulationResult[] = []) {
     const dataPoints: PredictedOutputMetric[] = [];
 
     for (const spec of data) {
@@ -44,6 +44,8 @@ export class SimulationResultsMapper {
           predicted_exit_max,
           predicted_exit_min,
         } = spec;
+
+        if (median === null) continue;
 
         dataPoints.push({
           median,
@@ -57,7 +59,7 @@ export class SimulationResultsMapper {
     return dataPoints;
   }
 
-  private getReferencePoints(data: SimulationResult[]) {
+  private getReferencePoints(data: SimulationResult[] = []) {
     const referenceMap: Record<TypePrediction, number | undefined> = {
       current: undefined,
       target: undefined,

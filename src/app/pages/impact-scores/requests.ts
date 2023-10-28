@@ -7,7 +7,7 @@ type FetchImpactScoresArgs = {
   dateRange: { startDate: string; endDate: string };
 };
 
-type ResponseType = {
+export type ImpactScoresResponseType = {
   [page: string]: {
     CUMULATIVE_LAYOUT_SHIFT: number;
     DOM_COMPLETE_TIME: number;
@@ -56,7 +56,7 @@ export const useFetchImpactScores = ({ tenant, application, dateRange }: FetchIm
     return scores;
   };
 
-  const { data, refetch, isLoading, error } = useQuery<ResponseType>({
+  const { data, refetch, isLoading, error } = useQuery<ImpactScoresResponseType>({
     enabled: false,
     queryKey: ["impact-scores"],
     queryFn: queryFnWithArgs,

@@ -1,7 +1,5 @@
 import React from "react";
-import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/node";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cleanup } from "@testing-library/react";
 
@@ -9,6 +7,9 @@ import { usePagesFromSelectedApp } from "./usePagesFromSelectedApp";
 import { useFiltersStore } from "@common/store";
 
 import tenants from "./__fixtures__/tenants.json";
+
+import { http, HttpResponse } from "msw";
+import { setupServer } from "msw/node";
 
 const apiHandlers = [
   http.get("*/api/get-tenants*", () => {
@@ -58,16 +59,13 @@ describe("usePagesFromSelectedApp", () => {
   });
 
   test("should return pages from selected app", async () => {
-    const { result, waitForNextUpdate, unmount } = renderHook(
-      () => usePagesFromSelectedApp(),
-      {
-        wrapper: ({ children }) => <Wrapper>{children}</Wrapper>,
-      }
-    );
+    const { result, unmount } = renderHook(() => usePagesFromSelectedApp(), {
+      wrapper: ({ children }) => <Wrapper>{children}</Wrapper>,
+    });
 
-    await waitForNextUpdate();
-
-    expect(result.current).toEqual(["page3", "page4"]);
+    waitFor(() => {
+      expect(result.current).toEqual(["page3", "page4"]);
+    });
 
     unmount();
   });
