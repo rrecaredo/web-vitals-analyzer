@@ -30,4 +30,5 @@ This is a demo application that domestrates some of the capabilities of the [Dyt
 
 The application relies on Dynatrace to serve the React based frontent assets in a CDN fashion. For the sake of simplicity, this is a "serverless" application.
 
-![Architecture](https://github.com/rrecaredo/leetcode/assets/196860/e4e20da6-c841-4715-bd6b-3531137ece4e)
+![architecture](https://github.com/rrecaredo/web-vitals-analyzer/assets/196860/c694a3bc-3b1a-465b-b06a-f75662e3425d)
+
